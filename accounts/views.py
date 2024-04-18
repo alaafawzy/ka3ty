@@ -18,21 +18,8 @@ class UserView(RetrieveAPIView):
 
 class RegisterView(CreateAPIView):
     permission_classes = [AllowAny]
+    queryset = None  # We don't need a queryset for user creation
     serializer_class = RegistrationSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data) 
-        serializer.is_valid(raise_exception=True) 
-        username = serializer.validated_data['username']
-        email = serializer.validated_data['email']
-        password = serializer.validated_data['password']
-        user = User.objects.create_user(username=username,email=email, password=password)
-                
-        user.save()
-            
-        return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            })
 
 
 class LoginView(GenericAPIView):
