@@ -3,11 +3,12 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate, logout, login
 from phonenumber_field.modelfields import PhoneNumberField 
 from .models import CustomUser
+from rest_framework.authtoken.models import Token
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('id', 'username', 'email')
+        model = CustomUser
+        fields = ('id', 'first_name', 'last_name', 'email','phone_number')
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -29,17 +30,44 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return user
 
 class LoginSerializer(serializers.Serializer):
-    username_or_email = serializers.CharField(required=True)
-    password = serializers.CharField(style={'input_type': 'password'}, required=True)
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
     def validate(self, attrs):
-        username_or_email = attrs['username_or_email']
-        password = attrs['password']
+        email = attrs.get('email')
+        password = attrs.get('password')
 
-        # Authenticate using either username or email
-        user = authenticate(username=username_or_email, password=password)
+        if not email or not password:
+            raise serializers.ValidationError('Both email and password are required.')
+
+        user = CustomUser.objects.filter(email=email).first()
         if not user:
-            raise serializers.ValidationError({'detail': 'Invalid credentials.'})
+            raise serializers.ValidationError('Invalid credentials.')
+
+        if not user.check_password(password):
+            raise serializers.ValidationError('Invalid credentials.')
+
+        attrs['user'] = user
+        return attrs
+class CustomAuthTokenSerializer(serializers.Serializer):
+    email = serializers.CharField(label='email')
+    password = serializers.CharField(label='Password', style={'input_type': 'password'})
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+        if email and password:
+            user = authenticate(request=self.context.get('request'), email=email, password=password)
+
+            if not user:
+                attrs['user'] = None
+                return attrs
+
+            token, created = Token.objects.get_or_create(user=user)
+            data = {"token": token.key, "user": user}
+
+        else:
+            raise serializers.ValidationError('Must include "email" and "password".')
 
         attrs['user'] = user
         return attrs
