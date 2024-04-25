@@ -29,7 +29,8 @@ class Hall(models.Model):
     area = models.FloatField()
     hall_number = models.CharField(max_length=255, unique=True)
     max_meal = models.PositiveIntegerField()
-
+    def __str__(self):
+        return f"{self.name}"
 class HallAttachments(models.Model):
     hall = models.ForeignKey('hall', related_name='hall_attachments', on_delete=models.CASCADE,db_index=True)
     file = models.FileField(upload_to=bug_attachment, blank=True, null=True,

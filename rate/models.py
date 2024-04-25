@@ -13,3 +13,5 @@ class Rate(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['hall', 'user'], name='unique_rate_per_hall_user'),
         ]
+    def __str__(self):
+        return f"{self.user}"

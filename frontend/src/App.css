@@ -1,0 +1,139 @@
+html,
+body {
+  height: 100%;
+}
+#root{
+  width: 100% !important;
+  height: 100% !important;
+}
+body {
+  display: flex;
+  align-items: center;
+  background-color: #f6f5f4 !important;
+}
+.container, .row {
+  margin-right: 0; /* Remove default right margin in RTL */
+  /* margin-left: -2% !important; Add left margin to center content */
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.login-image{
+  height: 100vh; /* 100vh for full viewport height */
+  display: flex; /* Allow centering of the image */
+  align-items: center; /* Vertically center the image */
+  justify-content: center
+}
+
+.login-form{
+  padding-right: 8%;
+  padding-left: 5%;
+}
+.form-signin {
+  max-width: 300px;
+  padding: 15px;
+  margin: auto;
+}
+.login-logo{
+  margin-right: 15% !important;
+}
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+.regist-first-name{
+  width: 40%;
+  margin-left: 20%;
+}
+.regist-last-name{
+  width: 40%;
+}
+.login-switch{
+  margin-right: 50px;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.nav-items-spaces{
+  display: flex;
+  justify-content: space-between;
+  width: 88vw;
+}
+.nav1{
+  display: flex;
+  justify-content: space-around;
+}
+.nav1 a {
+  text-decoration: none;  /* Remove underline */
+  color: inherit;
+  font-weight: bold;
+  font-family:  sans-serif;
+
+  
+}
+.home-carousel{
+  height: 400px !important;
+}
+.home-carousel-image{
+  height: 400px !important;
+  width: 100% !important;
+  /* object-fit: cover; */
+}
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  /* object-fit: cover; Optional for maintaining aspect ratio */
+}
+.home-cards-section{
+  margin: 50px !important;
+  width: 90% !important;
+}
+.home-card-image{
+  height: 200px !important;
+  width: 100%;
+}
+.home-card-box{
+  background-color: #ffffff !important;
+  border:none;
+  outline: none;
+}
+
+/*footer*/
+.footer-social{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.footer-writes{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.footer{
+  display: block;
+}
+/* end of footer */
+/* hall page */
+.hall-carousel{
+  height: 400px;
+  /* width: 80%; */
+}
+.hall-carousel img{
+  height: 400px;
+}
+.hall-details{
+  margin-top: 50px;
+}
+/* end of hall page */
+.remove-decoration{
+  text-decoration: none;
+  color: inherit;
+}

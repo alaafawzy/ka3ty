@@ -1,0 +1,1126 @@
+(function (w, d, $, undefined) {
+
+    var i = 0;
+    var x = 0;
+
+    var SITE = {
+        Init: function () {
+            var self = this;
+            SITE.Helper.Import(self);
+        },
+        Helper: {
+            Import: function (self) {
+                var obj;
+
+                for (obj in self) {
+                    if (self.hasOwnProperty(obj)) {
+                        var _method = self[obj];
+                        if (_method.selector !== undefined && _method.init !== undefined) {
+                            if ($(_method.selector).length) {
+                                _method.init();
+                            }
+                        }
+                    }
+                }
+            },
+            GetMethod: function (object, methodName) {
+                return function () {
+                    object[methodName].apply(object, arguments);
+                };
+            },
+            GetRandomNumber: function () {
+                return new Date().getTime() * (Math.random() * 1000000000);
+            },
+            IsNotEmpty: function (Object) {
+                return Object.length > 0;
+            }
+        },
+        homeBox: {
+            //#container.home section .boxes.row-1 .box a,#container.home section .boxes.row-2 .box a
+            selector: '#container.home section .boxes.row-2 .box,#container.home section .boxes.row-3 .box a, #container.ms section .boxes.row-1 .box a, .tour-list.type-2 li a,.honeymoon section.type-2 .tour-gallery a,.article-next a',
+            init: function () {
+
+                $(this.selector).mouseenter(function () {
+                    $(this).find('.title, .title-1, .title-2').hide();
+                    $(this).find('.text-container').css('display', 'table');
+                    $(this).find('.text-container').animate({
+                        height: '100%'
+                    }, 500);
+                    $('.boxes.row-2').addClass('open');
+
+                    $(this).find('img').css({'-webkit-transform': 'scale(1.2, 1.2)', '-webkit-transition-duration': '800ms', '-webkit-transition-timing-function': 'ease-out', '-moz-transform': 'scale(1.2, 1.2)', '-moz-transition-duration': '800ms', '-moz-transition-timing-function': 'ease-out', '-ms-transform': 'scale(1.2, 1.2)', '-ms-transition-duration': '800ms', '-ms-transition-timing-function': 'ease-out'});
+                    $(this).find('.arr').hide();
+                }).mouseleave(function () {
+                    $(this).find('.text-container').stop();
+                    $(this).find('.text-container').css({'height': '0', 'display': 'none'});
+                    $(this).find('.title, .title-1, .title-2').show();
+
+                    $(this).find('img').css({'-webkit-transform': 'scale(1, 1)', '-webkit-transition-duration': '800ms', '-webkit-transition-timing-function': 'ease-out', '-moz-transform': 'scale(1, 1)', '-moz-transition-duration': '800ms', '-moz-transition-timing-function': 'ease-out', '-ms-transform': 'scale(1, 1)', '-ms-transition-duration': '800ms', '-ms-transition-timing-function': 'ease-out'});
+
+                    $(this).find('.arr').show();
+
+                });
+                $('#container.home section .boxes.row-1 .box span.text-container, #container.home section .boxes.row-2 .box span.text-container, #container.home section .boxes.row-3 .box span.text-container, #container.ms section .boxes.row-1 .box span.text-container').css({'height': '0', 'display': 'none'});
+
+            }
+        },
+        navMenuJSON: {
+            selector: 'header > .container nav li a.menu',
+            init: function () {
+
+                var menu = menuJson;
+                var menuLinkCreated = 0;
+
+                $(this.selector).hover(function () {
+
+
+                    if (menuLinkCreated == 0) {
+
+                        menuLinkCreated = 1;
+                        $.each(menu, function (ulId, colLinks) {
+
+                            $.each(colLinks, function (href, innerText) {
+
+                                if (ulId != 'c1-c3') {
+                                    if (innerText.image != '') {
+                                        $('#' + ulId).append('<li><a href="' + innerText.url + '" data-image="' + innerText.image + '" onclick="ga(\'send\', \'event\', \'Top Navigation\', \'Click\', \'' + innerText.name + '\');">' + innerText.name + '</a></li>');
+
+                                    } else if (innerText.image == '') {
+                                        $('#' + ulId).append('<li><a href="' + innerText.url + '" onclick="ga(\'send\', \'event\', \'Top Navigation\', \'Click\', \'' + innerText.name + '\');">' + innerText.name + '</a></li>');
+                                    }
+                                    ;
+                                } else if (ulId = 'c1-c3') {
+                                    $('#' + ulId).append('<li><a href="' + innerText.url + '" onclick="ga(\'send\', \'event\', \'Top Navigation\', \'Click\', \'' + innerText.name + '\');"><img src="' + innerText.image + '" class="menu-img" /><span class="title">' + innerText.name + '</span><span class="overlay"></span></a></li>');
+                                }
+
+                            });
+                        });
+
+                    }
+
+                    var first_image = $('header > .container nav li .sub-nav.type-1 ul li a').attr('data-image');
+                    $('header > .container nav li .sub-nav.type-1 .image').html('<img src="' + first_image + '" />')
+
+                });
+
+                $(document).delegate("header > .container nav li .sub-nav.type-1 ul li a", "mouseover", function (e) {
+                    var data_image = $(this).attr('data-image');
+                    $('header > .container nav li .sub-nav.type-1 .image').html('<img src="' + data_image + '" />')
+                });
+
+            }
+        },
+        navMenu: {
+            selector: 'header > .container nav li',
+            init: function () {
+
+                $(this.selector).mouseenter(function () {
+
+
+                    $(this).find('.sub-nav').show();
+                    $(this).find('.menu').addClass('active');
+                }).mouseleave(function () {
+                    $(this).find('.sub-nav').hide();
+                    $(this).find('.menu').removeClass('active');
+                });
+
+            }
+        },
+        select2: {
+            selector: '.select2',
+            init: function () {
+
+                $(this.selector).select2({
+                    blurOnChange: false,
+                    allowClear: false
+                });
+
+            }
+        },
+        hederZindex: {
+            selector: 'header',
+            init: function () {
+
+                $(this.selector).mouseenter(function () {
+                    $('header').css('z-index','999999')
+                }).mouseleave(function () {
+                    $('header').css('z-index','9')
+                });
+
+            }
+        },
+        quickOpenTool: {
+            selector: '.quick-tooltip-open',
+            init: function () {
+
+                $('.quick-tooltip-open').mouseenter(function () {
+                    $(this).find('.quick-tooltip').show();
+                }).mouseleave(function () {
+                    $(this).find('.quick-tooltip').hide();
+                });
+
+            }
+        },
+
+        dataFormRef: {
+            selector: 'a[data-formref]',
+            init: function () {
+
+                $(this.selector).click(function () {
+                    var form_ref = $(this).attr('data-formref');
+                    $('#form_ref').attr('value', form_ref);
+                });
+
+            }
+        },
+        homeFilter: {
+            selector: '#home-filter',
+            init: function () {
+
+                listCatCity = function () {
+
+                    var city = $('#city-select').val();
+                    var cat = $('#category-select').val();
+
+                    if (city != 0 && cat != 0) {
+                        location.href = '/' + cat + '/' + city + '?ref=setcity-' + city;
+                    } else if (city == 0 && cat != 0) {
+                        location.href = '/' + cat;
+                    } else if (cat == 0 && city != 0) {
+                        location.href = '/' + city + 'dugun?ref=setcity' + city;
+                    } else {
+                        location.href = '/dugun-mekanlari/istanbul';
+                    }
+
+                }
+
+            }
+        },
+        userDD: {
+            selector: 'header > .container ul.user-dd',
+            init: function () {
+
+                $(this.selector).mouseenter(function () {
+                    $('.user-panel-dd').show();
+                }).mouseleave(function () {
+                    $('.user-panel-dd').hide();
+                });
+
+            }
+        },
+
+        userDDFixed: {
+            selector: '.user-dd-fixed',
+            init: function () {
+
+                $(window).scroll(function () {
+
+                    offsetLeft = $(".user-dd").offset().left;
+                    $('.user-dd').css({'position': 'fixed', 'left': offsetLeft, 'z-index': '9999', 'margin-top': '13px'});
+                    $('.user-panel-dd').css({'top': '50px'});
+
+                });
+
+
+            }
+        },
+        scTopHidden: {
+            selector: '.scroll-top',
+            init: function () {
+
+                $(window).scroll(function () {
+
+                    var sc_top = $(window).scrollTop();
+                    if (sc_top >= 100) {
+                        $('.scroll-top').show();
+                    } else {
+                        $('.scroll-top').hide();
+                    }
+
+                });
+
+            }
+        },
+        datePicker: {
+            selector: '.date-picker',
+            init: function () {
+
+                $(this.selector).mask("99-99-9999");
+                $(this.selector).datepicker({
+                    inline: true,
+                    dateFormat: 'dd-mm-yy',
+                    minDate: '+1d',
+                    beforeShow: function (input) {
+                        $('.formError').hide();
+                    },
+                    onClose: function (dateText, inst) {
+                        $('.formError').hide();
+                    }
+                });
+
+            }
+        },
+        searchOpened: {
+            selector: 'header > .container nav li a.search-open',
+            init: function () {
+
+
+                $(this.selector).click(function () {
+
+                    $('#zafafSearch').val('');
+                    $('.search-form').addClass('focus');
+
+                    if (x == 0) {
+                        $(this).addClass('active-s');
+                        $('header > .container .search-bar').addClass('show');
+                        $("#zafafSearch").focus();
+                        x = 1;
+                    } else {
+                        $(this).removeClass('active-s');
+                        $('header > .container .search-bar').removeClass('show');
+                        x = 0;
+                    }
+                });
+
+                $('header > .container .search-bar > .container .text').click(function () {
+                    $('.search-bar').find('.focus').removeClass('focus');
+                });
+
+                $('#zafafSearch').click(function () {
+                    $('header > .container .search-bar > .container .search-form').addClass('focus');
+                });
+
+            }
+        },
+
+        document: {
+            selector: 'html',
+            init: function () {
+
+                $('img').bind('contextmenu', function (e) {
+                    return false;
+                });
+
+                $(document).on('click', function (e) {
+
+                    if ($(e.target).closest("header .user").length === 0) {
+                        $('header .user').removeClass('open');
+                        i = 0;
+                    }
+
+                    if ($(e.target).closest("header > .container").length === 0) {
+                        $('header .search-bar').removeClass('show');
+                        $('.search-open').removeClass('active-s');
+                        $('#zafafSearch').val('');
+                        $('.search-form').addClass('focus');
+                        x = 0;
+                    }
+
+                });
+
+
+            }
+        },
+        scTop: {
+            selector: '.scroll-top',
+            init: function () {
+
+                $(this.selector).click(function () {
+
+                    $("html, body").animate({ scrollTop: 0 }, 600);
+
+                    return false;
+                });
+
+            }
+        },
+        scrollTop: {
+            selector: '.sticky-offer .container a.button,.provider-row.row-1 .row-right-2 a.button,.form-focus',
+            init: function () {
+
+                $(this.selector).click(function () {
+
+                    $("html, body").animate({ scrollTop: 95 }, 600);
+
+                    var data = $(this).attr('data-type');
+                    var action_source = $(this).data('action-source') || 'direct';
+                    if (data == "offer-form") {
+                        offerFormOpen(action_source);
+                    }
+                    return false;
+                });
+
+            }
+        },
+        getBid: {
+            selector: '.get-bid',
+            init: function () {
+
+                $(this.selector).click(function () {
+                    offerFormOpen('offer');
+                });
+
+            }
+        },
+        providerSendMail: {
+            selector: '.provider-send-mail',
+            init: function () {
+
+                $(this.selector).click(function () {
+
+                    $('.offer-lightbox,.site-overlay.type-1').show();
+                    $('.profile-offer-1 .cp-cover').css('z-index','1');
+
+
+                });
+
+            }
+        },
+        offerLightboxClose: {
+            selector: '.offer-lightbox-close',
+            init: function () {
+                $(this.selector).click(function () {
+
+                    $('.offer-lightbox,.site-overlay.type-1').hide();
+                    $('.profile-offer-1 .cp-cover.fixed').css('z-index','9999');
+
+                });
+
+            }
+        },
+        bxSlider: {
+            selector: '.discounts-slider, .company-gallery-list',
+            init: function () {
+                $('.discounts-slider').bxSlider({
+                    auto: true,
+                    autoHover: true,
+                    pause: 3500
+                });
+                $('.honeymoon-slider').bxSlider();
+                $('.company-gallery-list').bxSlider({
+                    slideWidth: 150,
+                    minSlides: 1,
+                    maxSlides: 5,
+                    slideMargin: 35
+                });
+            }
+        },
+        stickyHeader: {
+            selector: '.sticky-header',
+            init: function () {
+
+                sticky_header();
+
+                $(window).scroll(function () {
+                    sticky_header();
+                });
+
+                function sticky_header() {
+                    var i = $(window).scrollTop();
+                    if (i >= 100) {
+                        $('.sticky-header').show();
+                        $('.scroll-top').show();
+                    } else {
+                        $('.sticky-header').hide();
+                        $('.scroll-top').hide();
+                    }
+                }
+
+            }
+        },
+        stickyOffet: {
+            selector: '.sticky-offer',
+            init: function () {
+
+                sticky_header();
+
+                $(window).scroll(function () {
+                    sticky_header();
+                });
+
+                function sticky_header() {
+                    var i = $(window).scrollTop();
+                    if (i >= 550) {
+                        $('.sticky-offer').show();
+                        $('.scroll-top').show();
+                    } else {
+                        $('.sticky-offer').hide();
+                        $('.scroll-top').hide();
+                    }
+                }
+
+            }
+        },
+        stickyHeaderRemove: {
+            selector: 'section.company-profile',
+            init: function () {
+                $('.sticky-header').remove();
+            }
+        },
+        commentHide: {
+            selector: '.comment-hide',
+            init: function () {
+
+                $('.comment-hide').parent(0).append('<a href="javascript:void(0)" class="comment-show">Devamını Oku</a>');
+
+                $('.comment-show').click(function(){
+                    $(this).hide().prev().removeClass('comment-hide');
+                });
+
+            }
+        },
+        populerFixed: {
+            selector: '.fixed-div',
+            init: function () {
+
+                var status = $('.fixed-div.active').length;
+                var cpf_top = $('.fixed-div').offset().top;
+                var c_top = $('.article-comment').offset().top + 300;
+
+                if (status == 1) {
+                    populer_fixed();
+                }
+
+                $(window).scroll(function () {
+
+                    if (status == 1) {
+                        populer_fixed();
+                    }
+
+                });
+
+                function populer_fixed() {
+                    var scTop = $(window).scrollTop();
+
+                    if (scTop >= cpf_top) {
+                        $('.fixed-div').css({'position': 'fixed', 'top': '35px'});
+                    } else {
+                        $('.fixed-div').css({'position': 'relative', 'top': 'auto'});
+                    }
+
+                    if (scTop >= c_top) {
+                        $('.fixed-div').hide();
+                    } else {
+                        $('.fixed-div').show();
+                    }
+                }
+            }
+        },
+        honeymoonOfferSticky: {
+            selector: '.honeymoon aside #form-container',
+            init: function () {
+
+                var ac_top = $('.honeymoon aside #form-container').offset().top;
+                var cpf_top = $('.honeymoon aside #form-container').offset().top;
+
+
+                populer_fixed();
+
+                $(window).scroll(function () {
+                    populer_fixed();
+                });
+
+                function populer_fixed() {
+
+                    var scTop = $(window).scrollTop();
+
+                    /*if(scTop>=ac_top){
+                     $('.honeymoon aside.type-2 .offer').hide();
+                     }else{
+                     $('.honeymoon aside.type-2 .offer').show();
+                     }*/
+
+                    if (scTop >= cpf_top) {
+                        $('.honeymoon aside #form-container').css({'position': 'fixed', 'top': '-35px', 'z-index': '9999'});
+                    } else {
+                        $('.honeymoon aside #form-container').css({'position': 'relative', 'top': 'auto', 'z-index': '9999'});
+                    }
+                }
+
+
+            }
+        },
+        visitClick: {
+            selector: '.visit-click',
+            init: function () {
+                $(this.selector).click(function () {
+                    $(this).parent().addClass('is-visited');
+                });
+            }
+        },
+        sliderHeight: {
+            selector: '.home-slider',
+            init: function () {
+
+                slider_height();
+
+                $(window).resize(function () {
+                    slider_height();
+                });
+                function slider_height() {
+                    var windowHeight = $(window).height();
+                    if (windowHeight <= 600) {
+                        $('.home-slider').height(400);
+                    } else {
+                        $('.home-slider').height(450);
+                    }
+                }
+
+            }
+        },
+        homeCategoryHidden: {
+            selector: '.box-other',
+            init: function () {
+
+                var x = 0;
+
+                $(this.selector).click(function () {
+                    var hiddenDivHeight = $('.hidden-open').prev('.hidden').find('.height').height();
+                    if (x == 0) {
+                        hiddenDivHeight = hiddenDivHeight - 34;
+                        $('.hidden-open').prev('.hidden').animate({
+                            height: hiddenDivHeight
+                        }, 1000);
+                        $('.box-other').removeClass('down type-5');
+                        $('.box-other').addClass('up type-1');
+                        $('.box-other').html('Kapat');
+                        x = 1;
+                    } else if (x == 1) {
+                        $('.hidden-open').prev('.hidden').animate({
+                            height: 200
+                        }, 1000);
+                        x = 0;
+                        $('.box-other').addClass('down type-5');
+                        $('.box-other').removeClass('up type-1');
+                        $('.box-other').html('Daha fazla firma kategorisi görmek için tıkla');
+                    }
+                });
+            }
+        },
+        placeHolder: {
+            selector: '[placeholder]',
+            init: function () {
+                /*$('[placeholder]').focus(function () {
+                 var input = $(this);
+                 if (input.val() == input.attr('placeholder')) {
+                 input.val('');
+                 input.removeClass('placeholder');
+                 input.removeClass('first-input');
+                 input.removeClass('err');
+                 }
+                 }).blur(function () {
+                 var input = $(this);
+                 if (input.val() == '' || input.val() == input.attr('placeholder')) {
+                 input.addClass('placeholder');
+                 input.val(input.attr('placeholder'));
+                 }
+                 }).blur().parents('form').submit(function () {
+                 $(this).find('[placeholder]').each(function () {
+                 var input = $(this);
+                 if (input.val() == input.attr('placeholder')) {
+                 input.val('');
+                 }
+                 })
+                 });*/
+
+            }
+        },
+        dateNot: {
+            selector: '.date-not label',
+            init: function () {
+
+                var i = 0;
+
+                $(this.selector).change(function () {
+
+                    if (i == 0) {
+                        $('.date-not label').parent(2).prev().hide();
+                        $('.date-not label').parent(2).next().show();
+                        i = 1;
+                    } else if (i == 1) {
+                        $('.date-not label').parent(2).prev().show();
+                        $('.date-not label').parent(2).next().hide();
+                        i = 0;
+                    }
+
+
+                });
+
+
+            }
+        },
+        hiddenSticky: {
+            selector: 'section.company-profile .company-info .container .col-5 a, section.company-profile .company-comment .container .article-comment .button.all-comment',
+            init: function () {
+
+                $(this.selector).click(function () {
+
+                    setTimeout("$('.sticky-offer').hide()", 1000);
+
+                })
+
+            }
+        },
+        errClose: {
+            selector: '.err',
+            init: function () {
+
+                $(this.selector).click(function () {
+                    $(this).hide().prev().removeClass('err-border');
+                })
+
+            }
+        },
+        firstInput: {
+            selector: '#container.membership section.type-1 .content ul li input',
+            init: function () {
+                $(this.selector).click(function () {
+                    $('#container.membership section.type-1 .content ul li input').removeClass('first-input');
+                })
+            }
+        },
+        focusInput: {
+            selector: 'fieldset.form.type-1 input[type="text"], fieldset.form.type-1 input[type="password"], fieldset.form.type-1 textarea',
+            init: function () {
+                $(this.selector).focus(function () {
+                    $(this).next('.err').hide();
+                });
+            }
+        },
+        offerOpen: {
+            selector: '.cp-cover fieldset.form.type-2 ul li input,.cp-cover fieldset.form.type-2 ul li textarea,.cp-cover > .container .offer a.icon-pencil,.hm-detail .price .text a,.honeymoon aside.type-2 .offer ul li textarea,.honeymoon aside.type-2 .offer ul li input, .web-site .left .offer ul li input, .web-site .left .offer ul li textarea, .web-site .left .offer a.icon-pencil,.offer',
+            init: function () {
+                $(this.selector).click(function () {
+
+                    offerFormOpen();
+
+                })
+            }
+        },
+        quickOfferOpen: {
+            init: function () {
+
+            }
+        },
+        formFocus: {
+            selector: '.cp-cover > .container .offer',
+            init: function () {
+
+                formFocus = function () {
+                    offerFormOpen('form-focus');
+                }
+
+            }
+        },
+        overlayClose: {
+            selector: '.site-overlay.type-1',
+            init: function () {
+                $(this.selector).click(function () {
+                    /*$('.site-overlay.type-1,fieldset.form.type-2 p.teklif,.hidden-ir-form').hide();
+                     $('.cp-cover > .container .offer').css('z-index', '3');
+                     $('.fake-offer-btn').show();
+                     $('.sticky-offer').css('visibility', '');*/
+                    $('.site-overlay.type-1').hide();
+                    $('.offer-lightbox').hide();
+
+                })
+            }
+        },
+        offerForm: {
+            selector: '.cp-cover > .container .offer',
+            init: function () {
+                offerFormOpen = function (action_source) {
+                    var ga_city = $('input#ga_city').val();
+                    var ga_cat = $('input#ga_cat').val();
+                    var action_source =  action_source || 'direct';
+
+                    if ($(".hidden-ir-form").css('display') == 'none') {
+                        addOfferCloseButton();
+
+                        if ($('.provider-v2').length > 0 && ($(window).height() < 600 || offerTestVersion > 1)) {
+                            $("html, body").animate({ scrollTop: $('.profile-bar-container').offset().top }, 600, function(){
+                                $('.profile-offer-1 .cp-cover').removeClass('fixed');
+                            });
+                        }
+                        if (typeof ga !== "undefined") {
+                            ga('send', 'event', 'Teklif Form Open', action_source, ga_city + ' - ' + ga_cat);
+                        }
+
+                        $('.site-overlay.type-1,fieldset.form.type-2 p.teklif,.hidden-ir-form').show();
+                        $('.cp-cover > .container .offer').css('z-index', '9999');
+                        $('.fake-offer-btn').hide();
+                        $('.sticky-offer').css('visibility', 'hidden');
+
+                        $('.provider-v2 .cp-cover').css('z-index','9999');
+                    }
+                }
+
+            }
+        },
+        priceTooltip: {
+            selector: 'section.company-profile .company-info .container .col-2,.db-add-photo',
+            init: function () {
+                $(this.selector).mouseenter(function () {
+                    $(this).find('.tooltip').show();
+                }).mouseleave(function () {
+                    $(this).find('.tooltip').hide();
+                });
+            }
+        },
+        companyGallery: {
+            selector: 'section.company-profile .company-gallery .container ul li a',
+            init: function () {
+                $(this.selector).click(function () {
+
+                    $('section.company-profile #container').slideDown(500);
+
+                    offsetLeft = $(this).offset().left;
+                    cOffsetLeft = $('#container').offset().left;
+                    offsetLeft = (offsetLeft - cOffsetLeft) + 73;
+                    $('body').append('<style>section.company-profile #container:after, section.company-profile #container:before{left:' + offsetLeft + 'px}</style>');
+
+
+                })
+                $('section.company-profile #container.gallery section.type-2 a.icon-close').click(function () {
+                    $('section.company-profile #container').slideUp(500);
+                })
+            }
+        },
+        afterHover: {
+            selector: '.after',
+            init: function () {
+
+                $(this.selector).hover(function () {
+                    var content = $(this).attr('data-hover');
+                    $('body').append('<style>.after:hover:after{content:"' + content + '"!important;}</style>');
+                })
+
+            }
+        },
+        getPhone: {
+            selector: '.get-phone',
+            init: function () {
+
+                $(this.selector).click(function () {
+                    data_url = $(this).attr('data-url');
+                    data_id = $(this).attr('data-id');
+                    $.ajax({
+                        url: data_url,
+                        type: "POST",
+                        data: "id= " + data_id + "",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                $('.lightbox#getPhone').html(data.html);
+                            }
+                        }
+                    });
+                });
+
+            }
+        },
+        fancyBox: {
+            selector: '.fancybox',
+            init: function () {
+                //$(this.selector).fancybox();
+                $(this.selector).fancybox({
+                    helpers: {
+                        overlay: {
+                            locked: false
+                        }
+                    }
+                });
+            }
+        },
+        tabContent: {
+            selector: '.tab-content',
+            init: function () {
+
+                $activeID = $('.tab-content .tab-content-list li .active').attr('data-id');
+
+                $(".tab-content > .content").each(function () {
+                    $contentID = $(this).attr('data-content');
+                    if ($activeID == $contentID) {
+                        $(this).show();
+                    }
+                    ;
+                });
+
+                $('.tab-content .tab-content-list li a').click(function () {
+
+                    $(".tab-content > .content").hide();
+
+                    $('.tab-content .tab-content-list li a').removeClass('active');
+
+                    $activeID = $(this).addClass('active').attr('data-id');
+
+
+                    $(".tab-content > .content").each(function () {
+                        $contentID = $(this).attr('data-content');
+                        if ($activeID == $contentID) {
+                            $(this).show();
+                        }
+                        ;
+                    });
+
+                });
+
+
+            }
+        },
+        setProvider: {
+            selector: '#provider-id',
+            init: function () {
+
+                setProvider = function (providerId, providerName) {
+                    $('#provider-id').val(providerId);
+                }
+
+            }
+        },
+        processListForm: {
+            selector: '.planning-process-list ul li a, .planning-process-list ul li .icon-pencil',
+            init: function () {
+
+                $(this.selector).click(function () {
+                    $(this).parent().find('.db-form-state').toggle();
+                })
+
+            }
+        },
+        scrollToDiscounts: {
+            selector: 'section.company-profile',
+            init: function () {
+                if (window.location.hash == '#indirimi') {
+                    var data_discount = $('.provider-row.row-1 .row-right.provider-comment').attr('data-discount');
+                    if (data_discount) {
+                        html_disc = "<div class='discounts-radius'><span>" + data_discount + "</span></div>";
+                    } else {
+                        html_disc = "";
+                        $('body').append('<style>.popup-discounts{padding-top: 20px!important;}</style>')
+
+                    }
+
+                    var html = $('.provider-row.row-1 .row-right.provider-comment').html();
+                    if (html) {
+                        $(document).ready(function () {
+                            $.fancybox("<div class='popup-discounts'>" + html + "<p><a href=\"javascript:void(0);\" class=\"button type-1 pink\" data-formref=\"none\" onclick=\"offerFormOpen('offer-popup');\">Fiyat Teklifi Al</a></p><br/>" + html_disc + "</div> ");
+                            $('body').append('<style>.fancybox-inner{overflow: inherit!important;}</style>');
+                        });
+                    }
+                }
+            }
+        },
+        provider2ScrollToDiscounts: {
+            selector: '.profile-discounts',
+            init: function () {
+                if (window.location.hash == '#indirimi') {
+                    var data_discount = $('.profile-discount-title .count').attr('data-discount');
+                    if (data_discount) {
+                        html_disc = "<div class='discounts-radius'><span>" + data_discount + "</span></div>";
+                    } else {
+                        html_disc = "";
+                        $('body').append('<style>.popup-discounts{padding-top: 20px!important;}</style>')
+
+                    }
+                    var html = $('.profile-discount-text').html();
+                    if (html) {
+                        $(document).ready(function () {
+                            $.fancybox("<div class='popup-discounts'>" + html + "<p><a href=\"javascript:void(0);\" class=\"button type-1 pink\" data-formref=\"none\" onclick=\"offerFormOpen('offer-popup');\">Fiyat Teklifi Al</a></p><br/>" + html_disc + "</div> ");
+                            $('body').append('<style>.fancybox-inner{overflow: inherit!important;}</style>');
+                        });
+                    }
+                }
+            }
+        },
+        scrollToDiscountsTarget: {
+            selector: 'section.company-profile,.profile-discounts',
+            init: function () {
+                $(document).delegate(".popup-discounts .button", "click", function (e) {
+                    $('html').removeClass('fancybox-margin fancybox-lock');
+                    $('.fancybox-overlay').remove();
+
+
+                });
+            }
+        },
+        tourDetail: {
+            selector: '.hm-detail .tour-detail-btn a',
+            init: function () {
+
+                $(this.selector).click(function () {
+                    $(this).parent().next().toggle(500);
+                })
+            }
+        },
+        LongDesc: {
+            selector: '.long-description',
+            init: function () {
+
+                $('.long-description').append('<div class="expandable-indicator"></div><a href="javascript:void(0);" class="expandable-more">+ Daha Fazla</a>');
+
+                $(document).ready(function () {
+                    $('.long-description').click(function () {
+                        var pHeight = $(this).find('.expandable').height();
+                        $(this).find('.description-height').css({'height': '' + pHeight + '', 'transition': 'height 0.55s ease-in'});
+                        $(this).css('overflow', 'hidden');
+                        $(this).removeClass('long-description');
+                    });
+                });
+
+            }
+        },
+        discountsFilter: {
+            selector: '#discountsFilter',
+            init: function () {
+
+                $(document).ready(function () {
+                    $('#discountsCat,#discountsCity').change(function () {
+                        var val_cat = $('#discountsCat option:selected').val();
+                        var val_city = $('#discountsCity option:selected').val();
+                        if (val_cat == 0) {
+                            action = url + "indirim/" + val_city;
+                        } else {
+                            action = url + val_cat + "/indirim/" + val_city;
+                        }
+                        $('#discountsFilter').attr('action', action);
+                    });
+                })
+            }
+        },
+        profileList: {
+            selector: '.profile-list.type-1',
+            init: function () {
+
+                $('.profile-list.type-1 li a').click(function () {
+                    $('.profile-list.type-1 li a').removeClass('active');
+                    $(this).addClass('active');
+                })
+
+
+            }
+        },
+        ligtboxOfferForm: {
+            selector: '#lightbox-offer-form',
+            init: function () {
+
+                $("#lightbox-offer-form").on("submit", function (event) {
+
+                    event.preventDefault();
+                    form_data = $(this).serialize();
+                    form_post = $(this).attr('action');
+
+                    $('.offer-lightbox .n_btn').hide();
+
+
+                    $('.bekleyiniz').show();
+
+
+                    $.post(form_post, form_data, function (data) {
+
+                        if (data.status == 'success') {
+
+                            $('.offer-lightbox .teklif').hide();
+                            window.location = data.formThanksUrl;
+                            $('.bekleyiniz').hide();
+
+
+                        } else {
+
+                            $.each(data.fields, function (key, val) {
+                                if (val != '') {
+                                    $('.offer-lightbox #' + key).next('.err').html(val).show();
+                                    $('.offer-lightbox #' + key).addClass('err-border');
+                                }
+                                console.log(key + ' - ' + val);
+                            });
+
+                            $('.offer-lightbox .n_btn').show();
+
+                            $('.bekleyiniz').hide();
+
+
+                        }
+                    }, 'json');
+                    return false;
+                });
+
+                $(document).ready(function () {
+                    $('input').click(function () {
+                        $(this).removeClass('err-border');
+                        $(this).next('.err').hide();
+                    });
+                })
+
+
+            }
+        },
+        lightboxOfferForm: {
+            selector: '.profile-list.type-1',
+            init: function () {
+
+                $('.profile-list.type-1 li a').click(function () {
+                    $('.profile-list.type-1 li a').removeClass('active');
+                    $(this).addClass('active');
+                })
+
+            }
+        },
+        signupForm: {
+            selector: '#sign-up-form',
+            init: function () {
+
+                $(document).ready(function () {
+                    $('#sign-up-form').ajaxForm({
+                        dataType: 'json',
+                        beforeSubmit: hideSubmitButton,
+                        success: processSend
+                    });
+                    setWedDatePicker();
+
+
+                    $('#container.membership section.type-1 .content ul li input, #container.membership section.type-1 .content ul li select').click(function () {
+                        $(this).removeClass('err-border');
+                        $(this).next('.err').hide();
+                    });
+
+                });
+
+                function hideSubmitButton(data) {
+                    $('#sign-up-button').hide();
+                    $('#signup-wait-text').show();
+                }
+
+                function processSend(data) {
+                    if (data.status == 'success') {
+                        window.location = data.url;
+                    }
+                    else {
+                        $.each(data.fields, function (key, val) {
+                            if (val != '') {
+
+                                $('.' + key).next('.err').html(val).show();
+                                $('.' + key).addClass('err-border');
+                            }
+                            console.log(key + ' - ' + val);
+                        });
+                        $('#sign-up-button').show();
+                        $('#signup-wait-text').hide();
+                    }
+                }
+
+                function setWedDatePicker() {
+                    $(".data-picker").datepicker({ dateFormat: 'yy-mm-dd', minDate: '+1w', dayNamesMin: ['Pz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmts'], monthNames: ['Ocak', '�?ubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'] });
+                }
+
+            }
+        }
+
+    }
+
+
+    SITE.Init();
+    w.SITE = SITE;
+
+
+})(window, document, jQuery);
