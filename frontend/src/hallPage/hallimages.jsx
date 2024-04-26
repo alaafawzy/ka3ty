@@ -1,10 +1,15 @@
 import React from 'react';
 import { Carousel, Image, Card, CardBody, CardText, ListGroup, ListGroupItem, Form, Button, CardTitle } from 'react-bootstrap';
 import CommentForm from './comment';
+import { useNavigate } from "react-router-dom";
 
 function HallDetails(props) {
   const { hall } = props;
-
+  const navigate = useNavigate();
+  const reserve=()=>{
+    const reserve_url='/hall/'+String(hall.id)+'/reserve'
+    navigate(reserve_url);
+   }
   return (
     <div className="container hall-details  w-75">
       <h2>{hall.name}</h2><br/><br/>
@@ -29,16 +34,16 @@ function HallDetails(props) {
             <span className="fw-bold">اقصى عدد افراد:</span> {hall.capacity}
           </CardText>
           <CardText>
-            <span className="fw-bold">اقصى عدد وجبات:</span> {hall.capacity}
+            <span className="fw-bold">اقصى عدد وجبات:</span> {hall.max_meal}
           </CardText>
           <CardText>
-            <span className="fw-bold">المساحه:</span> {hall.capacity}
+            <span className="fw-bold">المساحه:</span> {hall.area}
           </CardText>
           <CardText>
-            <span className="fw-bold">العنوان:</span> {hall.capacity}
+            <span className="fw-bold">العنوان:</span> {hall.address}
           </CardText>
           <CardText>
-            <span className="fw-bold">رقم القاعة:</span> {hall.capacity}
+            <span className="fw-bold">رقم القاعة:</span> {hall.hall_number}
           </CardText>
           
         </CardBody>
@@ -68,6 +73,13 @@ function HallDetails(props) {
       <CommentForm onSubmit={(comment) => props.addComment(comment)} />
       <br/>
       <br/>
+      <div className='d-flex justify-content-around'>
+      <Button variant="primary" className='reserve-now-button' onClick={reserve}>
+            احجز الان
+          </Button>
+          </div>
+          <br/>
+          <br/>
     </div>
   );
 }

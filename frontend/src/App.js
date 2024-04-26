@@ -4,6 +4,7 @@ import Login from './authentication/login';
 import { Route,Routes} from 'react-router-dom';
 import Home from './home/home';
 import HallPage from './hallPage';
+import Reservation from './reservation';
 function App() {
   return (
     <Routes>
@@ -11,6 +12,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/" element={<Home />} />
       <Route path="/hall/:id" element={<HallPage />} />
+      <Route path="/hall/:id/reserve" element={<Reservation />} />
     </Routes>
   );
 }
