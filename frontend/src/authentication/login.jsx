@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import { Link } from 'react-router-dom';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../hooks/AuthContext';
+
 const images = [
   {
     src: '/images/5.webp',
@@ -22,7 +26,7 @@ const images = [
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const navigate = useNavigate();
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
@@ -30,12 +34,29 @@ function Login() {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
-
-  const handleSubmit = (event) => {
+  const { isLoggedIn,setIsLoggedIn } = useContext(AuthContext);
+  const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
     // Implement your login logic here (e.g., API call, validation)
-    console.log('Login form submitted:', email, password);
-    // Update state or perform redirection as needed
+    try {
+      const response = await axios.post('/accounts/login/', {
+        email,
+        password,
+      });
+
+      // Handle successful login response here (e.g., redirect, store token)
+      console.log('Login successful:', response.data);
+      setIsLoggedIn(true);
+      console.log(isLoggedIn);
+      navigate('/');
+      // Assuming your backend returns a token on successful login:
+      // localStorage.setItem('authToken', response.data.token);  // Example
+
+    } catch (error) {
+      console.error('Login failed:', error.response.data);
+      // Handle login errors (e.g., display error message to user)
+    }
+
   };
 
   return (

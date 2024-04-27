@@ -31,8 +31,9 @@ class Hall(models.Model):
     max_meal = models.PositiveIntegerField()
     def __str__(self):
         return f"{self.name}"
+
 class HallAttachments(models.Model):
-    hall = models.ForeignKey('hall', related_name='hall_attachments', on_delete=models.CASCADE,db_index=True)
+    hall = models.ForeignKey('hall', related_name='hall_attachments', on_delete=models.CASCADE)
     file = models.FileField(upload_to=bug_attachment, blank=True, null=True,
                             validators=[
                                 FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'mp4', 'mkv','gif','webm','pdf','doc','docx','ogg','avl','txt'])

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Navbar, Nav, Container, NavLink } from 'react-bootstrap'; // Import components
 import { Link } from 'react-router-dom';
-
+import { AuthContext } from '../hooks/AuthContext';
 function MyNavbar() {
+  
+  const { isLoggedIn,setIsLoggedIn } = useContext(AuthContext);
   return (
     <Navbar bg="light" expand="lg" collapseOnSelect>
       <Container>
@@ -29,13 +31,21 @@ function MyNavbar() {
           </Nav.Item> */}
           </div>
           <div className='nav1'>
+          {
+            isLoggedIn?(<Nav.Item className="mx-3 ">
+            <NavLink to="/logout">
+              <Link to="/logout">تسجيل خروج</Link></NavLink>
+          </Nav.Item>):<>
           <Nav.Item className="mx-3 ">
-            <NavLink to="/login">
-              <Link to="/login">تسجيل دخول</Link></NavLink>
-          </Nav.Item>
-          <Nav.Item className="mx-3">
-            <NavLink to="/register"><Link to="/login">تسجيل حساب</Link></NavLink>
-          </Nav.Item>
+          <NavLink to="/login">
+            <Link to="/login">تسجيل دخول</Link></NavLink>
+        </Nav.Item>
+        <Nav.Item className="mx-3">
+          <NavLink to="/register"><Link to="/register">تسجيل حساب</Link></NavLink>
+        </Nav.Item></>
+          }
+          
+          
           </div>
           </div>
           </Nav>

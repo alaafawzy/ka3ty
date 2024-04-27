@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import MyNavbar from '../component/navbar';
 import HomeCarousel from './homecarousel';
 import HallCard from './hallCard';
 import { Row, /* other components */ } from 'react-bootstrap';
 import Footer from '../component/footer';
+import { AuthContext } from '../hooks/AuthContext';
 const hallsData = [
     {
       id: 1,
@@ -129,6 +130,10 @@ const hallsData = [
     // ... other halls data
   ];
 function Home() {
+  
+  const { isLoggedIn,setIsLoggedIn } = useContext(AuthContext);
+  console.log(isLoggedIn)
+  
     return (<>
         <MyNavbar/>
         <HomeCarousel/>

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import { Link } from 'react-router-dom';
+
+import axios from "axios";
+
 const images = [
     {
       src: '/images/5.webp',
@@ -24,16 +27,16 @@ const images = [
 
 function Register() {
   const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [first_name, setFirst_name] = useState('');
+  const [last_name, setLast_name] = useState('');
   const [password, setPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone_number, setPhone_number] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Prevent default form submission
 
     // Basic validation (replace with more robust validation)
-    if (!email || !firstName || !lastName || !password) {
+    if (!email || !first_name || !last_name || !password ||!phone_number) {
       alert('Please fill in all required fields.');
       return;
     }
@@ -49,30 +52,34 @@ function Register() {
       // Prepare registration data
       const registrationData = {
         email,
-        firstName,
-        lastName,
+        first_name,
+        last_name,
         password,
-        phoneNumber, // Include phone number if necessary for your application
+        phone_number, // Include phone number if necessary for your application
       };
-
-      // Send registration data to server (replace with your actual API call)
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(registrationData),
+      const response = await axios.post('/accounts/register/', {
+        email,
+        password,
+        first_name,
+        last_name,
+        phone_number
       });
-
-      if (!response.ok) {
+      // Send registration data to server (replace with your actual API call)
+      console.log(response.status)
+      console.log(response.ok)
+      console.log(response.status==201)
+      if (!response.status==201) {
         throw new Error('Registration failed!');
       }
 
       // Handle successful registration (e.g., clear form, redirect)
       console.log('Registration successful!');
       setEmail('');
-      setFirstName('');
-      setLastName('');
+      setFirst_name('');
+      setLast_name('');
       setPassword('');
-      setPhoneNumber(''); // Clear phone number field as well
+      setPhone_number(''); // Clear phone number field as well
+      alert('Registration success. Please login.');
     } catch (error) {
       // Handle errors appropriately (e.g., display error message)
       console.error('Registration error:', error.message);
@@ -109,28 +116,28 @@ function Register() {
     <div className="form-floating regist-first-name">
       <input
         type="text"
-        id="firstName"
-        name="firstName"
+        id="first_name"
+        name="first_name"
         placeholder='firstname'
         className="form-control"
-        value={firstName}
-        onChange={(event) => setFirstName(event.target.value)}
+        value={first_name}
+        onChange={(event) => setFirst_name(event.target.value)}
         required
       />
-      <label for="firstName">الاسم الاول</label>
+      <label for="first_name">الاسم الاول</label>
       </div>
       <div className="form-floating regist-last-name">
       
       <input
         type="text"
-        id="lastName"
-        name="lastName"
+        id="last_name"
+        name="last_name"
         placeholder='lastname'
         className="form-control"
-        value={lastName}
-        onChange={(event) => setLastName(event.target.value)}
+        value={last_name}
+        onChange={(event) => setLast_name(event.target.value)}
         required
-      /><label for="lastName">الاسم الاخير</label>
+      /><label for="last_name">الاسم الاخير</label>
       </div>
       </div>
       <br/>
@@ -151,13 +158,13 @@ function Register() {
       
       <input
         type="tel" // Use "tel" for phone number input
-        id="phoneNumber"
-        name="phoneNumber"
+        id="phone_number"
+        name="phone_number"
         placeholder='phonenumber'
         className="form-control"
-        value={phoneNumber}
-        onChange={(event) => setPhoneNumber(event.target.value)}
-      /><label for="phoneNumber">رقم الهاتف</label>
+        value={phone_number}
+        onChange={(event) => setPhone_number(event.target.value)}
+      /><label for="phone_number">رقم الهاتف</label>
       
       </div>
       <br/>
