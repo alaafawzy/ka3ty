@@ -7,7 +7,7 @@ import os
 def bug_attachment(instance, filename):
     base_name, ext = os.path.splitext(filename)
     base_name = sanitize_file_name(base_name)
-    return 'attachments/hall/{}/{}{}'.format(instance.hall_id, base_name, ext)
+    return 'hall/{}/{}{}'.format(instance.hall_id, base_name, ext)
 
 def sanitize_file_name(filename):
     # Remove all non-alphanumeric characters from the filename
@@ -39,4 +39,4 @@ class HallAttachments(models.Model):
                                 FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'mp4', 'mkv','gif','webm','pdf','doc','docx','ogg','avl','txt'])
                             ])
     def __str__(self):
-        return str(self.file)
+        return str(self.file.name)

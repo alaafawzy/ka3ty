@@ -8,7 +8,9 @@ function ReservationDetails(props) {
   const handlePaymentChange = (event) => {
     setPaymentType(event.target.value);
   };
-
+  const handleSubmit =()=>{
+    alert('تم الحجز بنجاح');
+  }
   return (
     <div className="container  hall-details ">
       <h2 className='my-5 mx-5'>{hall.name}</h2>
@@ -44,7 +46,7 @@ function ReservationDetails(props) {
       </Card>
 
       <h3 style={{ marginBottom: '20px' }}>الحجز</h3>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>طريقة الدفع</Form.Label>
           <Form.Select value={paymentType} onChange={handlePaymentChange}>

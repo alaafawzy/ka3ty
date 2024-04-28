@@ -33,15 +33,13 @@ function Register() {
   const [phone_number, setPhone_number] = useState('');
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault(); 
 
-    // Basic validation (replace with more robust validation)
     if (!email || !first_name || !last_name || !password ||!phone_number) {
       alert('Please fill in all required fields.');
       return;
     }
 
-    // Validate email format (optional, consider using a library like `yup`)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       alert('Please enter a valid email address.');
@@ -49,13 +47,12 @@ function Register() {
     }
 
     try {
-      // Prepare registration data
       const registrationData = {
         email,
         first_name,
         last_name,
         password,
-        phone_number, // Include phone number if necessary for your application
+        phone_number, 
       };
       const response = await axios.post('/accounts/register/', {
         email,
@@ -64,7 +61,6 @@ function Register() {
         last_name,
         phone_number
       });
-      // Send registration data to server (replace with your actual API call)
       console.log(response.status)
       console.log(response.ok)
       console.log(response.status==201)
@@ -72,16 +68,14 @@ function Register() {
         throw new Error('Registration failed!');
       }
 
-      // Handle successful registration (e.g., clear form, redirect)
       console.log('Registration successful!');
       setEmail('');
       setFirst_name('');
       setLast_name('');
       setPassword('');
-      setPhone_number(''); // Clear phone number field as well
+      setPhone_number(''); 
       alert('Registration success. Please login.');
     } catch (error) {
-      // Handle errors appropriately (e.g., display error message)
       console.error('Registration error:', error.message);
       alert('Registration failed. Please try again.');
     }
@@ -173,10 +167,6 @@ function Register() {
     </form>
     </div>
     </div>
-
-
-
-
     <div className="col-md-8 slider-container ">
       
       <Carousel>

@@ -5,15 +5,17 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework import status
 
 from hall.models import Hall
-
+from django.views import View
 from .models import Rate
 from .serializers import RateCreateSerializer, RateSerializer
-
-
+from django.views.decorators.csrf import csrf_exempt
 class RateCreateView(GenericAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = RateCreateSerializer
-
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+    @csrf_exempt
     def post(self, request,hall_pk):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
